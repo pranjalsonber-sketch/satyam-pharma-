@@ -1,0 +1,139 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and role-based access control data.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "staff", "manager"] },
+        "isMfaEnabled": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Medicine": {
+      "title": "Medicine",
+      "description": "Inventory item for medicines.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "genericName": { "type": "string" },
+        "salt": { "type": "string" },
+        "barcode": { "type": "string" },
+        "batchNumber": { "type": "string" },
+        "expiryDate": { "type": "string", "format": "date" },
+        "rate": { "type": "number" },
+        "manufacturer": { "type": "string" },
+        "supplier": { "type": "string" },
+        "stockQuantity": { "type": "number" },
+        "type": { "type": "string", "enum": ["tablet", "capsule", "injection", "syrup", "others"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "expiryDate", "stockQuantity"]
+    },
+    "Sale": {
+      "title": "Sale",
+      "description": "Transaction record for sales.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "customerName": { "type": "string" },
+        "customerMobile": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "medicineId": { "type": "string" },
+              "name": { "type": "string" },
+              "quantity": { "type": "number" },
+              "price": { "type": "number" }
+            }
+          }
+        },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["cash", "card", "upi", "credit"] },
+        "billingType": { "type": "string", "enum": ["retail", "gst", "tax_invoice"] },
+        "staffId": { "type": "string" }
+      },
+      "required": ["items", "totalAmount", "paymentMethod"]
+    },
+    "Wholesaler": {
+      "title": "Wholesaler",
+      "description": "Contact details for wholesalers.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "contact": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "productTypes": { "type": "array", "items": { "type": "string" } },
+        "brands": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["name", "contact"]
+    },
+    "Bill": {
+      "title": "Bill",
+      "description": "Uploaded purchase bills for tracking.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "wholesalerId": { "type": "string" },
+        "amount": { "type": "number" },
+        "dueDate": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["pending", "paid"] },
+        "imageUrl": { "type": "string" },
+        "uploadedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["amount", "dueDate"]
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "System audit logs for tracking activity.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" },
+        "action": { "type": "string" },
+        "details": { "type": "string" }
+      }
+    },
+    "StockMovement": {
+      "title": "Stock Movement",
+      "description": "Batch-specific stock addition and deduction audit trail records.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "medicineId": { "type": "string" },
+        "medicineName": { "type": "string" },
+        "batchNumber": { "type": "string" },
+        "type": { "type": "string", "enum": ["addition", "subtraction"] },
+        "quantity": { "type": "number" },
+        "previousStock": { "type": "number" },
+        "newStock": { "type": "number" },
+        "reason": { "type": "string" },
+        "referenceId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userRole": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["medicineId", "medicineName", "type", "quantity", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": { "schema": "User", "description": "User profiles" },
+    "/inventory/{medicineId}": { "schema": "Medicine", "description": "Medicine stock" },
+    "/sales/{saleId}": { "schema": "Sale", "description": "Sales transactions" },
+    "/wholesalers/{wholesalerId}": { "schema": "Wholesaler", "description": "Wholesaler directory" },
+    "/bills/{billId}": { "schema": "Bill", "description": "Purchase bills" },
+    "/audit_logs/{logId}": { "schema": "AuditLog", "description": "Audit trails" },
+    "/stock_movements/{movementId}": { "schema": "StockMovement", "description": "Batch stock movement ledger" }
+  }
+}

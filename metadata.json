@@ -1,0 +1,11 @@
+{
+  "name": "Satyam Medical ERP",
+  "description": "A smart, AI-powered medical ERP for pharmacy management, sales tracking, and patient records with automated expiry alerts and billing.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

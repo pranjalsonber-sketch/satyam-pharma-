@@ -1,0 +1,249 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   AESTHETIC MEDICAL ERP THEME ENGINE & CLINICAL PALETTES
+   Engineered for clean daylight, high-focus dark, and nocturnal dispensary shifts.
+   ========================================================================== */
+
+:root {
+  --aesthetic-primary: #10b981;
+  --aesthetic-secondary: #059669;
+  --aesthetic-glow: rgba(16, 185, 129, 0.35);
+  --aesthetic-badge-bg: rgba(16, 185, 129, 0.15);
+  --aesthetic-badge-text: #059669;
+  --aesthetic-icon-bg: #064e3b;
+
+  --midnight-primary: #10b981;
+  --midnight-glow: rgba(16, 185, 129, 0.35);
+  --midnight-badge-bg: rgba(16, 185, 129, 0.15);
+  --midnight-badge-text: #34d399;
+  --midnight-icon-bg: #064e3b;
+}
+
+/* Ambient Backdrop Glow Mesh for Aesthetic Atmospheric Depth */
+html.theme-ambient-glow body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 380px;
+  background: radial-gradient(circle at 50% -80px, var(--aesthetic-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+  transition: opacity 0.5s ease, background 0.4s ease;
+}
+
+/* ==========================================================================
+   SMOOTH CROSS-FADE VIEW TRANSITIONS & SYSTEM THEME SWITCHING
+   Seamless GPU cross-fade animation when switching daylight, dark, & midnight
+   ========================================================================== */
+
+/* Modern View Transition API Cross-Fade */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 360ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation-name: theme-crossfade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: theme-crossfade-in;
+}
+
+@keyframes theme-crossfade-out {
+  from {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  to {
+    opacity: 0;
+    filter: blur(1px);
+  }
+}
+
+@keyframes theme-crossfade-in {
+  from {
+    opacity: 0;
+    filter: blur(1px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* Universal Transition Smoothing for Full-App Theme Switching */
+html,
+body,
+#root {
+  transition: background-color 360ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 260ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 360ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 360ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 260ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 360ms cubic-bezier(0.4, 0, 0.2, 1),
+              fill 360ms cubic-bezier(0.4, 0, 0.2, 1),
+              stroke 360ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 360ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-delay: 0s !important;
+}
+
+html.dark.theme-ambient-glow body::before {
+  opacity: 0.25;
+}
+
+/* Midnight Theme Base Overrides */
+html.midnight-theme {
+  color-scheme: dark;
+}
+
+html.midnight-theme body {
+  background-color: #050811;
+  color: #f1f5f9;
+}
+
+/* OLED Pure Black Option */
+html.midnight-theme.theme-oled body,
+html.midnight-theme.theme-oled .bg-slate-950,
+html.midnight-theme.theme-oled .dark\:bg-slate-950 {
+  background-color: #000000 !important;
+}
+
+html.midnight-theme.theme-oled .bg-slate-900,
+html.midnight-theme.theme-oled .dark\:bg-slate-900,
+html.midnight-theme.theme-oled .dark\:bg-zinc-900 {
+  background-color: #05070c !important;
+  border-color: #1e293b !important;
+}
+
+/* Midnight Card & Surface Elevators */
+html.midnight-theme .dark\:bg-slate-900,
+html.midnight-theme .dark\:bg-zinc-900,
+html.midnight-theme .dark\:bg-slate-900\/60 {
+  background-color: #0a0f1d !important;
+  border-color: #1e293b !important;
+}
+
+html.midnight-theme .dark\:bg-slate-800,
+html.midnight-theme .dark\:bg-slate-800\/50,
+html.midnight-theme .dark\:bg-slate-800\/80 {
+  background-color: #10172a !important;
+  border-color: #243046 !important;
+}
+
+html.midnight-theme .dark\:border-slate-800,
+html.midnight-theme .dark\:border-slate-700 {
+  border-color: #1e293b !important;
+}
+
+/* High Contrast Text Boost */
+html.theme-high-contrast h1,
+html.theme-high-contrast h2,
+html.theme-high-contrast h3,
+html.theme-high-contrast h4,
+html.theme-high-contrast .font-black,
+html.theme-high-contrast .font-bold {
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+html.midnight-theme.theme-high-contrast h1,
+html.midnight-theme.theme-high-contrast h2,
+html.midnight-theme.theme-high-contrast h3,
+html.midnight-theme.theme-high-contrast h4,
+html.midnight-theme.theme-high-contrast .font-black,
+html.midnight-theme.theme-high-contrast .font-bold {
+  color: #ffffff !important;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+/* High-Contrast Inputs for Low Light Scanning */
+html.midnight-theme input,
+html.midnight-theme select,
+html.midnight-theme textarea {
+  background-color: #0c1222 !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+}
+
+html.midnight-theme input:focus,
+html.midnight-theme select:focus,
+html.midnight-theme textarea:focus {
+  border-color: var(--aesthetic-primary) !important;
+  box-shadow: 0 0 0 2px var(--aesthetic-glow) !important;
+}
+
+/* Dynamic Aesthetic Utility Classes */
+.aesthetic-active-tab {
+  background-color: var(--aesthetic-primary) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 20px -4px var(--aesthetic-glow);
+}
+
+.aesthetic-border-accent {
+  border-color: var(--aesthetic-primary) !important;
+}
+
+.aesthetic-text-accent {
+  color: var(--aesthetic-primary) !important;
+}
+
+.aesthetic-badge {
+  background-color: var(--aesthetic-badge-bg) !important;
+  color: var(--aesthetic-badge-text) !important;
+}
+
+/* Smooth Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+.dark ::-webkit-scrollbar-thumb,
+.midnight-theme ::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover,
+.midnight-theme ::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6);
+}
+
+/* Night-Shift Pulse & Glowing Indicators */
+@keyframes aesthetic-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--aesthetic-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--aesthetic-glow);
+  }
+}
+
+.aesthetic-glow-active {
+  animation: aesthetic-pulse 2.5s infinite ease-in-out;
+}
+
